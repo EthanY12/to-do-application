@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import authService from '../services/authServer'
+import React, { useState } from "react";
+import authService from "../services/authServer";
 
 const Login = ({ setUser }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-        const user = await authService.login(username, password);
-        setUser(user);
-        window.location.href = '/';
+      const user = await authService.login(username, password);
+      setUser(user);
+      window.location.href = "/";
     } catch (error) {
-        setMessage('Login failed');
+      setMessage("Login failed");
     }
   };
 

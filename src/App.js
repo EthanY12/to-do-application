@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import Home from './components/Home';
-import authService from './services/authServer'; // Note: Correct the file name
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
+import authService from "./services/authServer"; // Note: Correct the file name
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,7 +31,13 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route
             path="/"
-            element={user ? <Home user={user} handleLogout={handleLogout} /> : <Navigate to="/login" />}
+            element={
+              user ? (
+                <Home user={user} handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
         </Routes>
       </div>

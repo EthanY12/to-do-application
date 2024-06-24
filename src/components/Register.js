@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import authService from '../services/authServer'
+import React, { useState } from "react";
+import authService from "../services/authServer";
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
       await authService.register(username, password);
-      setMessage('Registration successful');
+      setMessage("Registration successful");
     } catch (error) {
-      setMessage('Registration failed');
+      setMessage("Registration failed");
     }
   };
 
