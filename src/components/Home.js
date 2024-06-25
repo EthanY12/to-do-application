@@ -1,14 +1,12 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Home = ({ user, handleLogout }) => {
+const Home = ({ user, onLogout }) => {
   return (
-    <div className="home-container">
-      <h1>Welcome, {user ? user.username : "Guest"}</h1>
-      {user ? (
-        <button onClick={handleLogout}>Logout</button>
-      ) : (
-        <p>Please log in or register to access your tasks.</p>
-      )}
+    <div>
+      <h1>Welcome, {user.username}</h1>
+      <button onClick={onLogout}>Logout</button>
+      <Link to="/calendar">Go to Calendar</Link>
     </div>
   );
 };
