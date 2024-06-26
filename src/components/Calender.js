@@ -1,15 +1,23 @@
-import React from 'react';
-import "./Calender.css"
+import React from "react";
+import "./Calender.css";
 
 const Calendar = () => {
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
   const timeSlots = generateTimeSlots();
 
   function generateTimeSlots() {
     const slots = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
         slots.push(time);
       }
     }
@@ -21,7 +29,9 @@ const Calendar = () => {
       <div className="calendar-grid">
         <div className="calendar-header timeslot-header">Timeslot</div>
         {daysOfWeek.map((day) => (
-          <div className="calendar-header" key={day}>{day}</div>
+          <div className="calendar-header" key={day}>
+            {day}
+          </div>
         ))}
         <div className="calendar-time-column">
           {timeSlots.map((slot, index) => (
