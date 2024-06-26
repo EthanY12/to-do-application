@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import authService from '../services/authServer';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import authService from "../services/authServer";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const user = await authService.login(username, password);
-      console.log('Logged in user:', user);
+      console.log("Logged in user:", user);
       if (user.token) {
-        navigate('/calendar');
+        navigate("/calendar");
       } else {
-        setError('Login failed. No token received.');
+        setError("Login failed. No token received.");
       }
     } catch (err) {
-      console.error('Login error:', err.response ? err.response.data : err.message);
-      setError('Login failed. Please check your credentials.');
+      console.error(
+        "Login error:",
+        err.response ? err.response.data : err.message,
+      );
+      setError("Login failed. Please check your credentials.");
     }
   };
 
