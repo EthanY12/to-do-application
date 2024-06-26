@@ -1,14 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const Home = ({ user, onLogout }) => {
+const Calendar = () => {
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysInMonth = Array.from({ length: 30 }, (_, i) => i + 1);
+
   return (
-    <div>
-      <h1>Welcome, {user.username}</h1>
-      <button onClick={onLogout}>Logout</button>
-      <Link to="/calendar">Go to Calendar</Link>
+    <div className="calendar-container">
+      <div className="calendar-grid">
+        {daysOfWeek.map((day) => (
+          <div className="calendar-header" key={day}>{day}</div>
+        ))}
+        {daysInMonth.map((day) => (
+          <div className="calendar-day" key={day}>{day}</div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default Calendar;
