@@ -5,7 +5,7 @@ const Calendar = ({ user }) => {
     <div>
       <h2>Welcome to the Calendar, {user.username}!</h2>
       <div>
-        {/* Calendar implementation goes here */}
+      
       </div>
     </div>
   );

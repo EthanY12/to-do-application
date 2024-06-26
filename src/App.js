@@ -4,18 +4,18 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import Calendar from './components/Calender';
-import authService from './services/authServer';
+import authServer from './services/authServer';
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = authServer.getCurrentUser();
     setUser(currentUser);
   }, []);
 
   const handleLogout = () => {
-    authService.logout();
+    authServer.logout();
     setUser(null);
   };
 
