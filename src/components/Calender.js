@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import "./Calender.css"
+import React, { useState } from "react";
+import "./Calender.css";
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const startOfWeek = (date) => {
     const diff = date.getDate() - date.getDay();
@@ -25,7 +33,7 @@ const Calendar = () => {
     const slots = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
         slots.push(time);
       }
     }
@@ -62,7 +70,9 @@ const Calendar = () => {
         </div>
         {weekDays.map((day, dayIndex) => (
           <div key={dayIndex} className="calendar-day-column">
-            <div className="calendar-header">{daysOfWeek[day.getDay()]} {day.getDate()}</div>
+            <div className="calendar-header">
+              {daysOfWeek[day.getDay()]} {day.getDate()}
+            </div>
             {timeSlots.map((slot, slotIndex) => (
               <div key={slotIndex} className="calendar-slot"></div>
             ))}
