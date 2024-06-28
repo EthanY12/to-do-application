@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import authService from "../services/authServer";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import authService from '../services/authServer';
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
       await authService.register(username, password);
-      setMessage("Registration successful");
-    } catch (error) {
-      setMessage("Registration failed");
+      navigate('/login');
+    } catch (err) {
+      setError('Registration failed. Please try again.');
     }
   };
 
@@ -26,6 +28,7 @@ const Register = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -34,11 +37,12 @@ const Register = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
         <button type="submit">Register</button>
+        {error && <p>{error}</p>}
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };

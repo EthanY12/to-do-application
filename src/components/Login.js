@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authServer';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,14 +12,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const user = await authService.login(username, password);
-      console.log('Logged in user:', user);
-      if (user.token) {
-        navigate('/calendar');
-      } else {
-        setError('Login failed. No token received.');
-      }
+      onLogin(user);
+      navigate('/tickets');
     } catch (err) {
-      console.error('Login error:', err.response ? err.response.data : err.message);
       setError('Login failed. Please check your credentials.');
     }
   };
