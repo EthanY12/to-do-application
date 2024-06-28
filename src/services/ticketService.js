@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:5000';
+const API_URL = "http://localhost:5000";
 
 const getTickets = () => {
   return axios.get(`${API_URL}/tickets`);
@@ -22,5 +22,5 @@ export default {
   getTickets,
   createTicket,
   updateTicket,
-  deleteTicket
+  deleteTicket,
 };
