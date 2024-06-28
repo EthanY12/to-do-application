@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 20px;
   text-align: center;
 }
 
@@ -10,7 +10,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+}
+
+.ticket-list {
+  margin-bottom: 20px;
+}
+
+.ticket-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ticket-list li {
+  background: #f0f0f0;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-list button {
+  margin-left: 10px;
+  background: #f44336;
+  border: none;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.ticket-list button:hover {
+  background: #d32f2f;
 }
 
 .calendar-grid {
@@ -20,7 +53,7 @@
 }
 
 .calendar-time-column {
-  display: auto;
+  display: flex;
   flex-direction: column;
 }
 
@@ -29,35 +62,39 @@
   flex-direction: column;
 }
 
-.calendar-header,
-.calendar-time-slot,
-.calendar-slot {
+.calendar-header {
   background-color: #f0f0f0;
+  padding: 10px;
   text-align: center;
+  font-weight: bold;
   border: 1px solid #ddd;
   box-sizing: border-box;
-}
-
-.calendar-header {
-  padding: 25px;
-  font-weight: bold;
 }
 
 .timeslot-header {
   grid-column: 1;
 }
 
-.calendar-time-slot,
-.calendar-slot {
+.calendar-time-slot {
+  background-color: #fff;
+  text-align: center;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
   height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  line-height: 40px; /* Ensure vertical centering */
+}
+
+.calendar-slot {
   background-color: #fff;
   border: 1px solid #ddd;
+  height: 40px;
   box-sizing: border-box;
 }
 
-.calendar-time-slot {
-  background-color: #f0f0f0;
+.ticket {
+  background-color: #2196F3;
+  color: white;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 4px;
 }

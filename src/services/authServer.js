@@ -9,13 +9,11 @@ const register = (username, password) => {
 const login = async (username, password) => {
   try {
     const response = await axios.post(`${API_URL}/login`, { username, password });
-    console.log('Login response:', response.data);
-    if (response.data.token) {
-      localStorage.setItem('user', JSON.stringify(response.data));
+    if (response.data.user) {
+      localStorage.setItem('user', JSON.stringify(response.data.user));
     }
-    return response.data;
+    return response.data.user;
   } catch (error) {
-    console.error('Login error:', error.response ? error.response.data : error.message);
     throw error;
   }
 };

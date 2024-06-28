@@ -1,0 +1,14 @@
+.ticket-modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.ticket-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin-top: 50px; /* Adjust as needed */
+}
