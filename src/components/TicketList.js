@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const TicketList = ({ tickets, onEdit, onDelete }) => {
   // Sort tickets by date and then by time
@@ -22,11 +22,11 @@ const TicketList = ({ tickets, onEdit, onDelete }) => {
   return (
     <div className="ticket-list">
       <h2>Tickets</h2>
-      {Object.keys(groupedTickets).map(date => (
+      {Object.keys(groupedTickets).map((date) => (
         <div key={date} className="ticket-date-group">
           <h3>{date}</h3>
           <ul>
-            {groupedTickets[date].map(ticket => (
+            {groupedTickets[date].map((ticket) => (
               <li key={ticket.id}>
                 <div>
                   <strong>{ticket.title}</strong> - {ticket.time}

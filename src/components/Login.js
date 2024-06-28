@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import authService from '../services/authServer';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import authService from "../services/authServer";
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -13,9 +13,9 @@ const Login = ({ onLogin }) => {
     try {
       const user = await authService.login(username, password);
       onLogin(user);
-      navigate('/tickets');
+      navigate("/tickets");
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      setError("Login failed. Please check your credentials.");
     }
   };
 

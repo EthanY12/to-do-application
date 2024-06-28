@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './Calender.css';
-import TicketModal from './TicketModal';
-import authService from '../services/authServer';
+import React, { useState, useEffect } from "react";
+import "./Calender.css";
+import TicketModal from "./TicketModal";
+import authService from "../services/authServer";
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -9,7 +9,15 @@ const Calendar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTicket, setEditingTicket] = useState(null);
 
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -17,7 +25,7 @@ const Calendar = () => {
         const response = await authService.getTickets();
         setTickets(response.data);
       } catch (error) {
-        console.error('Failed to fetch tickets', error);
+        console.error("Failed to fetch tickets", error);
       }
     };
 
@@ -27,8 +35,13 @@ const Calendar = () => {
   const handleAddTicket = async (ticket) => {
     try {
       if (editingTicket) {
-        const response = await authService.updateTicket(editingTicket.id, ticket);
-        setTickets(tickets.map(t => (t.id === editingTicket.id ? response.data : t)));
+        const response = await authService.updateTicket(
+          editingTicket.id,
+          ticket,
+        );
+        setTickets(
+          tickets.map((t) => (t.id === editingTicket.id ? response.data : t)),
+        );
         setEditingTicket(null);
       } else {
         const response = await authService.createTicket(ticket);
@@ -36,16 +49,16 @@ const Calendar = () => {
       }
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Failed to add ticket', error);
+      console.error("Failed to add ticket", error);
     }
   };
 
   const handleDeleteTicket = async (id) => {
     try {
       await authService.deleteTicket(id);
-      setTickets(tickets.filter(ticket => ticket.id !== id));
+      setTickets(tickets.filter((ticket) => ticket.id !== id));
     } catch (error) {
-      console.error('Failed to delete ticket', error);
+      console.error("Failed to delete ticket", error);
     }
   };
 
@@ -73,7 +86,7 @@ const Calendar = () => {
     const slots = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
         slots.push(time);
       }
     }
@@ -93,7 +106,9 @@ const Calendar = () => {
   const timeSlots = generateTimeSlots();
 
   const getTicketsForSlot = (date, time) => {
-    return tickets.filter(ticket => ticket.date === date && ticket.time === time);
+    return tickets.filter(
+      (ticket) => ticket.date === date && ticket.time === time,
+    );
   };
 
   return (
@@ -105,11 +120,13 @@ const Calendar = () => {
       <div className="ticket-list">
         <h2>Tickets</h2>
         <ul>
-          {tickets.map(ticket => (
+          {tickets.map((ticket) => (
             <li key={ticket.id}>
               <strong>{ticket.title}</strong> - {ticket.date} {ticket.time}
               <button onClick={() => handleEditTicket(ticket)}>Edit</button>
-              <button onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
+              <button onClick={() => handleDeleteTicket(ticket.id)}>
+                Delete
+              </button>
             </li>
           ))}
         </ul>
@@ -130,15 +147,19 @@ const Calendar = () => {
         </div>
         {weekDays.map((day, dayIndex) => (
           <div key={dayIndex} className="calendar-day-column">
-            <div className="calendar-header">{daysOfWeek[day.getDay()]} {day.getDate()}</div>
+            <div className="calendar-header">
+              {daysOfWeek[day.getDay()]} {day.getDate()}
+            </div>
             {timeSlots.map((slot, slotIndex) => (
               <div key={slotIndex} className="calendar-slot">
-                {getTicketsForSlot(day.toISOString().split('T')[0], slot).map(ticket => (
-                  <div key={ticket.id} className="ticket">
-                    <strong>{ticket.title}</strong>
-                    <p>{ticket.description}</p>
-                  </div>
-                ))}
+                {getTicketsForSlot(day.toISOString().split("T")[0], slot).map(
+                  (ticket) => (
+                    <div key={ticket.id} className="ticket">
+                      <strong>{ticket.title}</strong>
+                      <p>{ticket.description}</p>
+                    </div>
+                  ),
+                )}
               </div>
             ))}
           </div>
@@ -146,7 +167,10 @@ const Calendar = () => {
       </div>
       <TicketModal
         isOpen={isModalOpen}
-        onRequestClose={() => { setIsModalOpen(false); setEditingTicket(null); }}
+        onRequestClose={() => {
+          setIsModalOpen(false);
+          setEditingTicket(null);
+        }}
         onAddTicket={handleAddTicket}
         editingTicket={editingTicket}
       />
