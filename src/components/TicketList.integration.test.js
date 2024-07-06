@@ -1,29 +1,41 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import TicketList from './TicketList';
-import authService from '../services/authServer';
-import ticketService from '../services/ticketService';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import TicketList from "./TicketList";
+import authService from "../services/authServer";
+import ticketService from "../services/ticketService";
 
-jest.mock('../services/authServer');
-jest.mock('../services/ticketService');
+jest.mock("../services/authServer");
+jest.mock("../services/ticketService");
 
 const tickets = [
-  { id: 1, title: 'Test Ticket 1', description: 'Test Description 1', date: '2024-07-04', time: '10:00' },
-  { id: 2, title: 'Test Ticket 2', description: 'Test Description 2', date: '2024-07-05', time: '11:00' }
+  {
+    id: 1,
+    title: "Test Ticket 1",
+    description: "Test Description 1",
+    date: "2024-07-04",
+    time: "10:00",
+  },
+  {
+    id: 2,
+    title: "Test Ticket 2",
+    description: "Test Description 2",
+    date: "2024-07-05",
+    time: "11:00",
+  },
 ];
 
-describe('TicketList Component Integration Tests', () => {
+describe("TicketList Component Integration Tests", () => {
   beforeEach(() => {
-    authService.getCurrentUser.mockReturnValue({ id: 1, username: 'testuser' });
+    authService.getCurrentUser.mockReturnValue({ id: 1, username: "testuser" });
     ticketService.getTickets.mockResolvedValue({ data: tickets });
   });
 
-  test('fetches and displays tickets on load', async () => {
+  test("fetches and displays tickets on load", async () => {
     render(
       <Router>
         <TicketList />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -34,13 +46,13 @@ describe('TicketList Component Integration Tests', () => {
     });
   });
 
-  test('deletes a ticket successfully', async () => {
+  test("deletes a ticket successfully", async () => {
     ticketService.deleteTicket.mockResolvedValue({});
 
     render(
       <Router>
         <TicketList />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -55,11 +67,11 @@ describe('TicketList Component Integration Tests', () => {
     });
   });
 
-  test('opens edit modal on edit button click', async () => {
+  test("opens edit modal on edit button click", async () => {
     render(
       <Router>
         <TicketList />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
