@@ -24,8 +24,9 @@ const Login = ({ onLogin }) => {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
-          <label>Username</label>
+          <label htmlFor="login-username">Username</label>
           <input
+            id="login-username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -33,8 +34,9 @@ const Login = ({ onLogin }) => {
           />
         </div>
         <div>
-          <label>Password</label>
+          <label htmlFor="login-password">Password</label>
           <input
+            id="login-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -42,7 +44,6 @@ const Login = ({ onLogin }) => {
           />
         </div>
         <button type="submit">Login</button>
-        {error && <p>{error}</p>}
       </form>
     </div>
   );

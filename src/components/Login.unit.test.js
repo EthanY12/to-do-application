@@ -1,10 +1,6 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import Login from "./Login";
-import authService from "../services/authServer";
-
-jest.mock("../services/authServer");
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import Login from './Login';
 
 describe("Login Component", () => {
   test("renders login form", () => {
@@ -15,36 +11,39 @@ describe("Login Component", () => {
     expect(screen.getByText(/login/i)).toBeInTheDocument();
   });
 
-  test("displays error on failed login", async () => {
-    authService.login.mockRejectedValueOnce(new Error("Login failed"));
+  test('displays error on failed login', async () => {
+    const onLogin = jest.fn().mockRejectedValue(new Error('Login failed'));
 
-    render(<Login />, { wrapper: MemoryRouter });
+    render(<Login onLogin={onLogin} />, { wrapper: MemoryRouter });
 
     fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: "testuser" },
+      target: { value: 'testuser' },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
+      target: { value: 'password' },
     });
-    fireEvent.click(screen.getByText(/login/i));
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    expect(await screen.findByText(/login failed/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/login failed/i)).toBeInTheDocument();
+    });
   });
 
-  test("calls login service on form submit", async () => {
-    const mockUser = { username: "testuser" };
-    authService.login.mockResolvedValueOnce(mockUser);
+  test('calls login service on form submit', async () => {
+    const onLogin = jest.fn().mockResolvedValue({});
 
-    render(<Login onLogin={jest.fn()} />, { wrapper: MemoryRouter });
+    render(<Login onLogin={onLogin} />, { wrapper: MemoryRouter });
 
     fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: "testuser" },
+      target: { value: 'testuser' },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
+      target: { value: 'password' },
     });
-    fireEvent.click(screen.getByText(/login/i));
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    expect(authService.login).toHaveBeenCalledWith("testuser", "password");
+    await waitFor(() => {
+      expect(onLogin).toHaveBeenCalledWith('testuser', 'password');
+    });
   });
 });
