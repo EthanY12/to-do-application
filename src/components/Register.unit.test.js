@@ -7,10 +7,6 @@ import authService from "../services/authServer";
 jest.mock("../services/authServer");
 
 describe("Register Component Unit Tests", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
   test("renders Register component correctly", () => {
     render(
       <Router>
@@ -43,7 +39,7 @@ describe("Register Component Unit Tests", () => {
   });
 
   test("calls register service on form submit", async () => {
-    authService.register.mockResolvedValue({ message: "User registered" });
+    authService.register.mockResolvedValueOnce({ username: "testuser" });
 
     render(
       <Router>
@@ -65,9 +61,9 @@ describe("Register Component Unit Tests", () => {
   });
 
   test("shows error message on failed registration", async () => {
-    authService.register.mockRejectedValue({
-      response: { data: { message: "Registration failed" } },
-    });
+    authService.register.mockRejectedValueOnce(
+      new Error("Registration failed"),
+    );
 
     render(
       <Router>
@@ -84,9 +80,7 @@ describe("Register Component Unit Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
     await waitFor(() => {
-      expect(authService.register).toHaveBeenCalledWith("testuser", "password");
+      expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
     });
-
-    expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
   });
 });

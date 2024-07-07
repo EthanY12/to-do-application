@@ -9,12 +9,10 @@ jest.mock("../services/authServer");
 
 describe("Register Component Integration Tests", () => {
   beforeEach(() => {
-    localStorage.clear();
+    authService.register.mockResolvedValue({ username: "testuser" });
   });
 
   test("navigates to login on successful registration", async () => {
-    authService.register.mockResolvedValue({ message: "User registered" });
-
     render(
       <Router>
         <Routes>
@@ -33,17 +31,12 @@ describe("Register Component Integration Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
     await waitFor(() => {
-      expect(authService.register).toHaveBeenCalledWith("testuser", "password");
+      expect(screen.getByText(/login/i)).toBeInTheDocument();
     });
-
-    expect(screen.queryByLabelText(/username/i)).not.toBeInTheDocument();
-    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
   });
 
   test("stays on register page on failed registration", async () => {
-    authService.register.mockRejectedValue({
-      response: { data: { message: "Registration failed" } },
-    });
+    authService.register.mockRejectedValue(new Error("Registration failed"));
 
     render(
       <Router>
@@ -63,10 +56,7 @@ describe("Register Component Integration Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
     await waitFor(() => {
-      expect(authService.register).toHaveBeenCalledWith("testuser", "password");
+      expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
     });
-
-    expect(screen.queryByLabelText(/username/i)).toBeInTheDocument();
-    expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
   });
 });

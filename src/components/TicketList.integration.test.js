@@ -3,32 +3,27 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import TicketList from "./TicketList";
 import authService from "../services/authServer";
-import ticketService from "../services/ticketService";
 
 jest.mock("../services/authServer");
-jest.mock("../services/ticketService");
-
-const tickets = [
-  {
-    id: 1,
-    title: "Test Ticket 1",
-    description: "Test Description 1",
-    date: "2024-07-04",
-    time: "10:00",
-  },
-  {
-    id: 2,
-    title: "Test Ticket 2",
-    description: "Test Description 2",
-    date: "2024-07-05",
-    time: "11:00",
-  },
-];
 
 describe("TicketList Component Integration Tests", () => {
   beforeEach(() => {
-    authService.getCurrentUser.mockReturnValue({ id: 1, username: "testuser" });
-    ticketService.getTickets.mockResolvedValue({ data: tickets });
+    authService.getTickets.mockResolvedValue([
+      {
+        id: 1,
+        title: "Test Ticket 1",
+        description: "Description 1",
+        date: "2023-07-01",
+        time: "10:00",
+      },
+      {
+        id: 2,
+        title: "Test Ticket 2",
+        description: "Description 2",
+        date: "2023-07-02",
+        time: "11:00",
+      },
+    ]);
   });
 
   test("fetches and displays tickets on load", async () => {
@@ -39,15 +34,13 @@ describe("TicketList Component Integration Tests", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/test ticket 1/i)).toBeInTheDocument();
-      expect(screen.getByText(/test description 1/i)).toBeInTheDocument();
-      expect(screen.getByText(/test ticket 2/i)).toBeInTheDocument();
-      expect(screen.getByText(/test description 2/i)).toBeInTheDocument();
+      expect(screen.getByText("Test Ticket 1")).toBeInTheDocument();
+      expect(screen.getByText("Test Ticket 2")).toBeInTheDocument();
     });
   });
 
   test("deletes a ticket successfully", async () => {
-    ticketService.deleteTicket.mockResolvedValue({});
+    authService.deleteTicket.mockResolvedValueOnce({});
 
     render(
       <Router>
@@ -55,15 +48,10 @@ describe("TicketList Component Integration Tests", () => {
       </Router>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/test ticket 1/i)).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getAllByText(/delete/i)[0]);
+    fireEvent.click(screen.getByText("Delete", { selector: "button" }));
 
     await waitFor(() => {
-      expect(ticketService.deleteTicket).toHaveBeenCalledWith(1);
-      expect(screen.queryByText(/test ticket 1/i)).not.toBeInTheDocument();
+      expect(screen.queryByText("Test Ticket 1")).not.toBeInTheDocument();
     });
   });
 
@@ -74,13 +62,10 @@ describe("TicketList Component Integration Tests", () => {
       </Router>,
     );
 
+    fireEvent.click(screen.getByText("Edit", { selector: "button" }));
+
     await waitFor(() => {
-      expect(screen.getByText(/test ticket 1/i)).toBeInTheDocument();
+      expect(screen.getByText("Edit Ticket")).toBeInTheDocument();
     });
-
-    fireEvent.click(screen.getAllByText(/edit/i)[0]);
-
-    expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
   });
 });

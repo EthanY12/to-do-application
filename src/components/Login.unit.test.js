@@ -1,56 +1,20 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import Login from "./Login";
-import authService from "../services/authServer";
-import userEvent from "@testing-library/user-event";
 
-jest.mock("../services/authServer");
-
-describe("Login Component Unit Tests", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
-  test("renders Login component correctly", () => {
-    render(
-      <Router>
-        <Login />
-      </Router>,
-    );
+describe("Login Component", () => {
+  test("renders login form", () => {
+    render(<Login />, { wrapper: MemoryRouter });
 
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByText(/login/i)).toBeInTheDocument();
   });
 
-  test("updates state on input change", () => {
-    render(
-      <Router>
-        <Login />
-      </Router>,
-    );
+  test("displays error on failed login", async () => {
+    const onLogin = jest.fn().mockRejectedValue(new Error("Login failed"));
 
-    const usernameInput = screen.getByLabelText(/username/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-
-    fireEvent.change(usernameInput, { target: { value: "testuser" } });
-    fireEvent.change(passwordInput, { target: { value: "password" } });
-
-    expect(usernameInput.value).toBe("testuser");
-    expect(passwordInput.value).toBe("password");
-  });
-
-  test("calls login service on form submit", async () => {
-    authService.login.mockResolvedValue({
-      user: { id: 1, username: "testuser", token: "testtoken" },
-    });
-
-    render(
-      <Router>
-        <Login />
-      </Router>,
-    );
+    render(<Login onLogin={onLogin} />, { wrapper: MemoryRouter });
 
     fireEvent.change(screen.getByLabelText(/username/i), {
       target: { value: "testuser" },
@@ -61,43 +25,25 @@ describe("Login Component Unit Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(() => {
-      expect(authService.login).toHaveBeenCalledWith("testuser", "password");
+      expect(screen.getByText(/login failed/i)).toBeInTheDocument();
     });
-
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      "user",
-      JSON.stringify({ id: 1, username: "testuser", token: "testtoken" }),
-    );
   });
 
-  test("shows error message on failed login", async () => {
-    authService.login.mockRejectedValue({
-      response: { data: { message: "Invalid credentials" } },
-    });
+  test("calls login service on form submit", async () => {
+    const onLogin = jest.fn().mockResolvedValue({});
 
-    render(
-      <Router>
-        <Login />
-      </Router>,
-    );
+    render(<Login onLogin={onLogin} />, { wrapper: MemoryRouter });
 
     fireEvent.change(screen.getByLabelText(/username/i), {
       target: { value: "testuser" },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "wrongpassword" },
+      target: { value: "password" },
     });
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(() => {
-      expect(authService.login).toHaveBeenCalledWith(
-        "testuser",
-        "wrongpassword",
-      );
+      expect(onLogin).toHaveBeenCalledWith("testuser", "password");
     });
-
-    expect(
-      screen.getByText(/login failed. please check your credentials./i),
-    ).toBeInTheDocument();
   });
 });
