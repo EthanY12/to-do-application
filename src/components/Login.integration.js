@@ -1,28 +1,32 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import Login from './Login';
-import authService from '../services/authServer';
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import Login from "./Login";
+import authService from "../services/authServer";
 
-jest.mock('../services/authServer');
+jest.mock("../services/authServer");
 
-describe('Login Component Integration', () => {
-  test('logs in and navigates to tickets page', async () => {
-    const mockUser = { username: 'testuser' };
+describe("Login Component Integration", () => {
+  test("logs in and navigates to tickets page", async () => {
+    const mockUser = { username: "testuser" };
     authService.login.mockResolvedValueOnce(mockUser);
 
     const mockNavigate = jest.fn();
     render(
       <MemoryRouter>
         <Login onLogin={jest.fn()} />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'testuser' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password' } });
+    fireEvent.change(screen.getByLabelText(/username/i), {
+      target: { value: "testuser" },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: "password" },
+    });
     fireEvent.click(screen.getByText(/login/i));
 
-    expect(authService.login).toHaveBeenCalledWith('testuser', 'password');
+    expect(authService.login).toHaveBeenCalledWith("testuser", "password");
     expect(await screen.findByText(/tickets/i)).toBeInTheDocument();
   });
 });
