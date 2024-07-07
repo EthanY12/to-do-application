@@ -1,11 +1,11 @@
-import authService from './authServer';
-import ticketService from './ticketService';
+import authService from "./authServer";
+import ticketService from "./ticketService";
 
-jest.mock('./authServer');
-jest.mock('./ticketService');
+jest.mock("./authServer");
+jest.mock("./ticketService");
 
-describe('authService and ticketService Integration Tests', () => {
-  const mockUser = { id: 1, username: 'testuser', token: 'testtoken' };
+describe("authService and ticketService Integration Tests", () => {
+  const mockUser = { id: 1, username: "testuser", token: "testtoken" };
 
   beforeEach(() => {
     authService.register.mockResolvedValue(mockUser);
@@ -13,15 +13,18 @@ describe('authService and ticketService Integration Tests', () => {
     ticketService.getTickets.mockResolvedValue([]);
   });
 
-  test('should register, login, and fetch tickets for a user', async () => {
+  test("should register, login, and fetch tickets for a user", async () => {
     // Register user
-    const registerResult = await authService.register('testuser', 'password');
+    const registerResult = await authService.register("testuser", "password");
     expect(registerResult).toEqual(mockUser);
 
     // Login user
-    const loginResult = await authService.login('testuser', 'password');
+    const loginResult = await authService.login("testuser", "password");
     expect(loginResult).toEqual(mockUser);
-    expect(localStorage.setItem).toHaveBeenCalledWith('user', JSON.stringify(mockUser));
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      "user",
+      JSON.stringify(mockUser),
+    );
 
     // Fetch tickets
     const tickets = await ticketService.getTickets();
