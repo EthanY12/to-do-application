@@ -14,8 +14,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "test": "jest --config=jest.config.js",
+    "test:integration": "jest --config=jest.integration.config.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
   },
@@ -41,6 +42,8 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "axios-mock-adapter": "^1.0.0",
+    "mockdate": "^3.0.0"
   }
 }
