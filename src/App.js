@@ -1,3 +1,8 @@
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
@@ -60,6 +65,12 @@ const App = () => {
     setIsModalOpen(true);
   };
 
+  const handleToggleComplete = (id) => {
+    setTickets(tickets.map(ticket =>
+      ticket.id === id ? { ...ticket, completed: !ticket.completed } : ticket
+    ));
+  };
+
   return (
     <Router>
       <div className="App">
@@ -83,7 +94,12 @@ const App = () => {
                 <>
                   <h1>Ticket Management System</h1>
                   <button onClick={() => setIsModalOpen(true)}>New Ticket</button>
-                  <TicketList tickets={tickets} onEdit={handleEditTicket} onDelete={handleDeleteTicket} />
+                  <TicketList
+                    tickets={tickets}
+                    onEdit={handleEditTicket}
+                    onDelete={handleDeleteTicket}
+                    onToggleComplete={handleToggleComplete}
+                  />
                   <TicketModal
                     isOpen={isModalOpen}
                     onRequestClose={() => { setIsModalOpen(false); setEditingTicket(null); }}
