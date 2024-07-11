@@ -1,11 +1,24 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React from "react";
+import Modal from "react-modal";
 
-const TicketModal = ({ isOpen, onRequestClose, onAddTicket, editingTicket }) => {
-  const [title, setTitle] = React.useState(editingTicket ? editingTicket.title : '');
-  const [description, setDescription] = React.useState(editingTicket ? editingTicket.description : '');
-  const [date, setDate] = React.useState(editingTicket ? editingTicket.date : '');
-  const [time, setTime] = React.useState(editingTicket ? editingTicket.time : '');
+const TicketModal = ({
+  isOpen,
+  onRequestClose,
+  onAddTicket,
+  editingTicket,
+}) => {
+  const [title, setTitle] = React.useState(
+    editingTicket ? editingTicket.title : "",
+  );
+  const [description, setDescription] = React.useState(
+    editingTicket ? editingTicket.description : "",
+  );
+  const [date, setDate] = React.useState(
+    editingTicket ? editingTicket.date : "",
+  );
+  const [time, setTime] = React.useState(
+    editingTicket ? editingTicket.time : "",
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,8 +31,12 @@ const TicketModal = ({ isOpen, onRequestClose, onAddTicket, editingTicket }) => 
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Ticket Modal">
-      <h2>{editingTicket ? 'Edit Ticket' : 'Add New Ticket'}</h2>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Ticket Modal"
+    >
+      <h2>{editingTicket ? "Edit Ticket" : "Add New Ticket"}</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title</label>
@@ -61,8 +78,12 @@ const TicketModal = ({ isOpen, onRequestClose, onAddTicket, editingTicket }) => 
             required
           />
         </div>
-        <button type="submit">{editingTicket ? 'Update Ticket' : 'Add Ticket'}</button>
-        <button type="button" onClick={onRequestClose}>Close</button>
+        <button type="submit">
+          {editingTicket ? "Update Ticket" : "Add Ticket"}
+        </button>
+        <button type="button" onClick={onRequestClose}>
+          Close
+        </button>
       </form>
     </Modal>
   );

@@ -1,18 +1,18 @@
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import TicketModal from './components/TicketModal';
-import TicketList from './components/TicketList';
-import Login from './components/Login';
-import Register from './components/Register';
-import authService from './services/authServer';
-import ticketService from './services/ticketService';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import TicketModal from "./components/TicketModal";
+import TicketList from "./components/TicketList";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import authService from "./services/authServer";
+import ticketService from "./services/ticketService";
+import "./App.css";
 
 const App = () => {
   const [tickets, setTickets] = useState([]);
@@ -26,7 +26,7 @@ const App = () => {
         const response = await ticketService.getTickets();
         setTickets(response.data);
       } catch (error) {
-        console.error('Failed to fetch tickets', error);
+        console.error("Failed to fetch tickets", error);
       }
     };
 
@@ -38,8 +38,13 @@ const App = () => {
   const handleAddTicket = async (ticket) => {
     try {
       if (editingTicket) {
-        const response = await ticketService.updateTicket(editingTicket.id, ticket);
-        setTickets(tickets.map(t => (t.id === editingTicket.id ? response.data : t)));
+        const response = await ticketService.updateTicket(
+          editingTicket.id,
+          ticket,
+        );
+        setTickets(
+          tickets.map((t) => (t.id === editingTicket.id ? response.data : t)),
+        );
         setEditingTicket(null);
       } else {
         const response = await ticketService.createTicket(ticket);
@@ -47,16 +52,16 @@ const App = () => {
       }
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Failed to add ticket', error);
+      console.error("Failed to add ticket", error);
     }
   };
 
   const handleDeleteTicket = async (id) => {
     try {
       await ticketService.deleteTicket(id);
-      setTickets(tickets.filter(ticket => ticket.id !== id));
+      setTickets(tickets.filter((ticket) => ticket.id !== id));
     } catch (error) {
-      console.error('Failed to delete ticket', error);
+      console.error("Failed to delete ticket", error);
     }
   };
 
@@ -66,9 +71,11 @@ const App = () => {
   };
 
   const handleToggleComplete = (id) => {
-    setTickets(tickets.map(ticket =>
-      ticket.id === id ? { ...ticket, completed: !ticket.completed } : ticket
-    ));
+    setTickets(
+      tickets.map((ticket) =>
+        ticket.id === id ? { ...ticket, completed: !ticket.completed } : ticket,
+      ),
+    );
   };
 
   return (
@@ -77,23 +84,25 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={currentUser ? <Navigate to="/tickets" /> : <Navigate to="/login" />}
+            element={
+              currentUser ? (
+                <Navigate to="/tickets" />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
-          <Route
-            path="/login"
-            element={<Login onLogin={setCurrentUser} />}
-          />
-          <Route
-            path="/register"
-            element={<Register />}
-          />
+          <Route path="/login" element={<Login onLogin={setCurrentUser} />} />
+          <Route path="/register" element={<Register />} />
           <Route
             path="/tickets"
             element={
               currentUser ? (
                 <>
                   <h1>Ticket Management System</h1>
-                  <button onClick={() => setIsModalOpen(true)}>New Ticket</button>
+                  <button onClick={() => setIsModalOpen(true)}>
+                    New Ticket
+                  </button>
                   <TicketList
                     tickets={tickets}
                     onEdit={handleEditTicket}
@@ -102,7 +111,10 @@ const App = () => {
                   />
                   <TicketModal
                     isOpen={isModalOpen}
-                    onRequestClose={() => { setIsModalOpen(false); setEditingTicket(null); }}
+                    onRequestClose={() => {
+                      setIsModalOpen(false);
+                      setEditingTicket(null);
+                    }}
                     onAddTicket={handleAddTicket}
                     editingTicket={editingTicket}
                   />
