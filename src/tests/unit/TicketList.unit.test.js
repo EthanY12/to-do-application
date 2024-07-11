@@ -41,7 +41,7 @@ describe("TicketList Component Unit Tests", () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleComplete={mockOnToggleComplete}
-      />
+      />,
     );
 
     await screen.findByText(/test ticket 1/i);
@@ -59,7 +59,7 @@ describe("TicketList Component Unit Tests", () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleComplete={mockOnToggleComplete}
-      />
+      />,
     );
 
     await screen.findByText(/test ticket 1/i);
@@ -76,7 +76,7 @@ describe("TicketList Component Unit Tests", () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleComplete={mockOnToggleComplete}
-      />
+      />,
     );
 
     await screen.findByText(/test ticket 1/i);
@@ -93,7 +93,7 @@ describe("TicketList Component Unit Tests", () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleComplete={mockOnToggleComplete}
-      />
+      />,
     );
 
     await screen.findByText(/test ticket 1/i);
