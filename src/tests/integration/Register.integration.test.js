@@ -19,7 +19,7 @@ describe("Register Component Integration Tests", () => {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </Router>
+      </Router>,
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {
@@ -31,7 +31,9 @@ describe("Register Component Integration Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: /login/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /login/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -44,7 +46,7 @@ describe("Register Component Integration Tests", () => {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </Router>
+      </Router>,
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {
