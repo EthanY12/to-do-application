@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Register from "./Register";
-import authService from "../services/authServer";
+import Register from "../../components/Register";
+import authService from "../../services/authServer";
 
-jest.mock("../services/authServer");
+jest.mock("../../services/authServer");
 
 describe("Register Component Unit Tests", () => {
   test("renders Register component correctly", () => {

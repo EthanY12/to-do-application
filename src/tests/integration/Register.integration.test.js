@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Register from "./Register";
-import Login from "./Login";
-import authService from "../services/authServer";
+import Register from "../../components/Register";
+import Login from "../../components/Login";
+import authService from "../../services/authServer";
 
-jest.mock("../services/authServer");
+jest.mock("../../services/authServer");
 
 describe("Register Component Integration Tests", () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe("Register Component Integration Tests", () => {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </Router>,
+      </Router>
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {
@@ -31,7 +31,7 @@ describe("Register Component Integration Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/login/i)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /login/i })).toBeInTheDocument();
     });
   });
 
@@ -44,7 +44,7 @@ describe("Register Component Integration Tests", () => {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </Router>,
+      </Router>
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {

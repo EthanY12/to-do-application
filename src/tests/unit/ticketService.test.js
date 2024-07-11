@@ -1,5 +1,5 @@
 import axios from "axios";
-import ticketService from "./ticketService";
+import ticketService from "../../services/ticketService";
 import MockAdapter from "axios-mock-adapter";
 
 const mock = new MockAdapter(axios);
