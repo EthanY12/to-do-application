@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Modal from "react-modal";
 import TicketModal from "./components/TicketModal";
 import TicketList from "./components/TicketList";
@@ -39,7 +44,9 @@ const App = () => {
       console.log("Adding ticket:", ticket); // Log the ticket data
       const newTicket = await ticketService.createTicket(ticket);
       console.log("Ticket added:", newTicket); // Log the added ticket response
-      setTickets((prevTickets) => Array.isArray(prevTickets) ? [...prevTickets, newTicket] : [newTicket]); // Ensure prevTickets is an array
+      setTickets((prevTickets) =>
+        Array.isArray(prevTickets) ? [...prevTickets, newTicket] : [newTicket],
+      ); // Ensure prevTickets is an array
       setIsModalOpen(false);
     } catch (error) {
       console.error("Failed to add ticket", error);
@@ -50,7 +57,11 @@ const App = () => {
   const handleDeleteTicket = async (id) => {
     try {
       await ticketService.deleteTicket(id);
-      setTickets((prevTickets) => Array.isArray(prevTickets) ? prevTickets.filter((ticket) => ticket.id !== id) : []); // Ensure prevTickets is an array
+      setTickets((prevTickets) =>
+        Array.isArray(prevTickets)
+          ? prevTickets.filter((ticket) => ticket.id !== id)
+          : [],
+      ); // Ensure prevTickets is an array
     } catch (error) {
       console.error("Failed to delete ticket", error);
     }
@@ -72,9 +83,9 @@ const App = () => {
       setTickets((prevTickets) =>
         Array.isArray(prevTickets)
           ? prevTickets.map((ticket) =>
-              ticket.id === id ? updatedTicket : ticket
+              ticket.id === id ? updatedTicket : ticket,
             )
-          : []
+          : [],
       );
     } catch (error) {
       console.error("Failed to toggle ticket completion", error);
@@ -94,7 +105,9 @@ const App = () => {
               currentUser ? (
                 <>
                   <h1>Ticket Management System</h1>
-                  <button onClick={() => setIsModalOpen(true)}>New Ticket</button>
+                  <button onClick={() => setIsModalOpen(true)}>
+                    New Ticket
+                  </button>
                   <TicketList
                     tickets={tickets}
                     onEdit={handleEditTicket}

@@ -2,7 +2,14 @@ import React from "react";
 
 const TicketList = ({ tickets = [], onEdit, onDelete, onToggleComplete }) => {
   // Filter out any undefined or malformed tickets
-  const validTickets = tickets.filter(ticket => ticket && ticket.date && ticket.time && ticket.title && ticket.description);
+  const validTickets = tickets.filter(
+    (ticket) =>
+      ticket &&
+      ticket.date &&
+      ticket.time &&
+      ticket.title &&
+      ticket.description,
+  );
 
   // Sort tickets by date and then by time
   const sortedTickets = validTickets.sort((a, b) => {
