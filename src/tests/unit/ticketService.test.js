@@ -1,14 +1,14 @@
-import axios from 'axios';
-import ticketService from '../../services/ticketService';
+import axios from "axios";
+import ticketService from "../../services/ticketService";
 
-jest.mock('axios');
+jest.mock("axios");
 
-describe('ticketService', () => {
-  describe('getTickets', () => {
-    it('should fetch all tickets', async () => {
+describe("ticketService", () => {
+  describe("getTickets", () => {
+    it("should fetch all tickets", async () => {
       const mockTickets = [
-        { id: 1, title: 'Test Ticket 1', description: 'Test Description 1' },
-        { id: 2, title: 'Test Ticket 2', description: 'Test Description 2' }
+        { id: 1, title: "Test Ticket 1", description: "Test Description 1" },
+        { id: 2, title: "Test Ticket 2", description: "Test Description 2" },
       ];
       axios.get.mockResolvedValueOnce({ data: mockTickets });
 
@@ -18,9 +18,9 @@ describe('ticketService', () => {
     });
   });
 
-  describe('createTicket', () => {
-    it('should create a new ticket', async () => {
-      const newTicket = { title: 'New Ticket', description: 'New Description' };
+  describe("createTicket", () => {
+    it("should create a new ticket", async () => {
+      const newTicket = { title: "New Ticket", description: "New Description" };
       const mockResponse = { ...newTicket, id: 3 };
       axios.post.mockResolvedValueOnce({ data: mockResponse });
 
@@ -30,9 +30,12 @@ describe('ticketService', () => {
     });
   });
 
-  describe('updateTicket', () => {
-    it('should update an existing ticket', async () => {
-      const updatedTicket = { title: 'Updated Ticket', description: 'Updated Description' };
+  describe("updateTicket", () => {
+    it("should update an existing ticket", async () => {
+      const updatedTicket = {
+        title: "Updated Ticket",
+        description: "Updated Description",
+      };
       axios.put.mockResolvedValueOnce({ data: updatedTicket });
 
       const result = await ticketService.updateTicket(1, updatedTicket);
@@ -41,8 +44,8 @@ describe('ticketService', () => {
     });
   });
 
-  describe('deleteTicket', () => {
-    it('should delete a ticket', async () => {
+  describe("deleteTicket", () => {
+    it("should delete a ticket", async () => {
       axios.delete.mockResolvedValueOnce({ status: 200 });
 
       const result = await ticketService.deleteTicket(1);

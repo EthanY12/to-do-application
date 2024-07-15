@@ -14,7 +14,7 @@ describe("Login Component Integration", () => {
     render(
       <MemoryRouter>
         <Login onLogin={jest.fn()} />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {
