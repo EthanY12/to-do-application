@@ -1,26 +1,31 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://localhost:5000/tickets';
 
-const getTickets = () => {
-  return axios.get(`${API_URL}/tickets`);
+const getTickets = async () => {
+  const response = await axios.get(API_URL);
+  console.log('API response for getTickets:', response.data); // Log the response data
+  return response.data; // Ensure this returns the tickets data
 };
 
-const createTicket = (ticket) => {
-  return axios.post(`${API_URL}/tickets`, ticket);
+const createTicket = async (ticket) => {
+  const response = await axios.post(API_URL, ticket);
+  console.log('API response for createTicket:', response.data); // Log the response data
+  return response.data; // Ensure this returns the created ticket data
 };
 
-const updateTicket = (id, ticket) => {
-  return axios.put(`${API_URL}/tickets/${id}`, ticket);
+const updateTicket = async (id, ticket) => {
+  const response = await axios.put(`${API_URL}/${id}`, ticket);
+  return response.data;
 };
 
-const deleteTicket = (id) => {
-  return axios.delete(`${API_URL}/tickets/${id}`);
+const deleteTicket = async (id) => {
+  await axios.delete(`${API_URL}/${id}`);
 };
 
 export default {
   getTickets,
   createTicket,
   updateTicket,
-  deleteTicket
+  deleteTicket,
 };

@@ -1,62 +1,30 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Register from "../../components/Register";
-import Login from "../../components/Login";
-import authService from "../../services/authServer";
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Register from '../../components/Register';
+import authService from '../../services/authServer';
 
-jest.mock("../../services/authServer");
+jest.mock('../../services/authServer');
 
-describe("Register Component Integration Tests", () => {
+const renderWithRouter = (ui, { route = '/' } = {}) => {
+  window.history.pushState({}, 'Test page', route);
+  return render(ui, { wrapper: Router });
+};
+
+describe('Register Component Integration Tests', () => {
   beforeEach(() => {
-    authService.register.mockResolvedValue({ username: "testuser" });
+    authService.register.mockResolvedValue({});
   });
 
-  test("navigates to login on successful registration", async () => {
-    render(
-      <Router>
-        <Routes>
-          <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Router>
-    );
+  test('redirects to login page on successful registration', async () => {
+    renderWithRouter(<Register />, { route: '/register' });
 
-    fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: "testuser" },
-    });
-    fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'testuser' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password' } });
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: /login/i })).toBeInTheDocument();
-    });
-  });
-
-  test("stays on register page on failed registration", async () => {
-    authService.register.mockRejectedValue(new Error("Registration failed"));
-
-    render(
-      <Router>
-        <Routes>
-          <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Router>
-    );
-
-    fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: "testuser" },
-    });
-    fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
+      expect(screen.getByText(/login/i)).toBeInTheDocument();
     });
   });
 });

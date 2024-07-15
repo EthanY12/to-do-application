@@ -4,18 +4,17 @@ import { MemoryRouter } from "react-router-dom";
 import Login from "../../components/Login";
 import authService from "../../services/authServer";
 
-jest.mock("../services/authServer");
+jest.mock("../../services/authServer");
 
 describe("Login Component Integration", () => {
   test("logs in and navigates to tickets page", async () => {
     const mockUser = { username: "testuser" };
     authService.login.mockResolvedValueOnce(mockUser);
 
-    const mockNavigate = jest.fn();
     render(
       <MemoryRouter>
         <Login onLogin={jest.fn()} />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     fireEvent.change(screen.getByLabelText(/username/i), {

@@ -1,39 +1,87 @@
-// src/tests/unit/Login.unit.test.js
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom' // for the "toBeInTheDocument" matcher
-import Login from '../../components/Login'; // Adjust the path as necessary
-import { MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import Login from '../../components/Login';
+import authService from '../../services/authServer';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-// Mock the authService.login function
-jest.mock('../../services/authServer', () => ({
-  login: jest.fn(),
+jest.mock('../../services/authServer');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
 }));
 
-import authService from '../../services/authServer';
+describe('Login Component Unit Tests', () => {
+  const mockOnLogin = jest.fn();
+  const mockNavigate = jest.fn();
 
-describe('Login Component', () => {
   beforeEach(() => {
-    // Clear all instances and calls to constructor and all methods:
     authService.login.mockClear();
-  });
-
-  it('renders Login component correctly', () => {
-    render(<Login onLogin={jest.fn()} />, { wrapper: MemoryRouter });
-
-    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    mockOnLogin.mockClear();
+    mockNavigate.mockClear();
+    useNavigate.mockReturnValue(mockNavigate);
   });
 
   it('calls login function on form submit with correct data', async () => {
-    const mockOnLogin = jest.fn();
-    render(<Login onLogin={mockOnLogin} />, { wrapper: MemoryRouter });
+    authService.login.mockResolvedValueOnce({ id: 1, username: 'testuser' });
 
-    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'testuser' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password' } });
+    await act(async () => {
+      render(
+        <Router>
+          <Login onLogin={mockOnLogin} />
+        </Router>
+      );
+    });
+
+    fireEvent.change(screen.getByLabelText(/username/i), {
+      target: { value: 'testuser' }
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password' }
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    expect(authService.login).toHaveBeenCalledWith('testuser', 'password');
+    await waitFor(() => {
+      expect(authService.login).toHaveBeenCalledWith({
+        username: 'testuser',
+        password: 'password'
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockOnLogin).toHaveBeenCalledWith({ id: 1, username: 'testuser' });
+    });
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/tickets');
+    });
+  });
+
+  it('shows error message on failed login', async () => {
+    authService.login.mockRejectedValueOnce({
+      response: { data: { message: 'Login failed' } }
+    });
+
+    await act(async () => {
+      render(
+        <Router>
+          <Login onLogin={mockOnLogin} />
+        </Router>
+      );
+    });
+
+    fireEvent.change(screen.getByLabelText(/username/i), {
+      target: { value: 'testuser' }
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password' }
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/login failed/i)).toBeInTheDocument();
+    });
   });
 });

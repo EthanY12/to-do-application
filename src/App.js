@@ -1,18 +1,16 @@
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import Modal from "react-modal";
+import TicketModal from "./components/TicketModal";
+import TicketList from "./components/TicketList";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import authService from "./services/authServer";
+import ticketService from "./services/ticketService";
+import "./App.css";
 
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import TicketModal from './components/TicketModal';
-import TicketList from './components/TicketList';
-import Login from './components/Login';
-import Register from './components/Register';
-import authService from './services/authServer';
-import ticketService from './services/ticketService';
-import './App.css';
+// Set the app element for react-modal
+Modal.setAppElement("#root");
 
 const App = () => {
   const [tickets, setTickets] = useState([]);
@@ -23,10 +21,11 @@ const App = () => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await ticketService.getTickets();
-        setTickets(response.data);
+        const tickets = await ticketService.getTickets();
+        console.log("Fetched tickets:", tickets); // Log fetched tickets
+        setTickets(Array.isArray(tickets) ? tickets : []); // Ensure this is an array
       } catch (error) {
-        console.error('Failed to fetch tickets', error);
+        console.error("Failed to fetch tickets", error);
       }
     };
 
@@ -37,26 +36,23 @@ const App = () => {
 
   const handleAddTicket = async (ticket) => {
     try {
-      if (editingTicket) {
-        const response = await ticketService.updateTicket(editingTicket.id, ticket);
-        setTickets(tickets.map(t => (t.id === editingTicket.id ? response.data : t)));
-        setEditingTicket(null);
-      } else {
-        const response = await ticketService.createTicket(ticket);
-        setTickets([...tickets, response.data]);
-      }
+      console.log("Adding ticket:", ticket); // Log the ticket data
+      const newTicket = await ticketService.createTicket(ticket);
+      console.log("Ticket added:", newTicket); // Log the added ticket response
+      setTickets((prevTickets) => Array.isArray(prevTickets) ? [...prevTickets, newTicket] : [newTicket]); // Ensure prevTickets is an array
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Failed to add ticket', error);
+      console.error("Failed to add ticket", error);
+      console.error("Error response:", error.response); // Log error response from server
     }
   };
 
   const handleDeleteTicket = async (id) => {
     try {
       await ticketService.deleteTicket(id);
-      setTickets(tickets.filter(ticket => ticket.id !== id));
+      setTickets((prevTickets) => Array.isArray(prevTickets) ? prevTickets.filter((ticket) => ticket.id !== id) : []); // Ensure prevTickets is an array
     } catch (error) {
-      console.error('Failed to delete ticket', error);
+      console.error("Failed to delete ticket", error);
     }
   };
 
@@ -65,28 +61,33 @@ const App = () => {
     setIsModalOpen(true);
   };
 
-  const handleToggleComplete = (id) => {
-    setTickets(tickets.map(ticket =>
-      ticket.id === id ? { ...ticket, completed: !ticket.completed } : ticket
-    ));
+  const handleToggleComplete = async (id) => {
+    try {
+      const ticketToToggle = tickets.find((ticket) => ticket.id === id);
+      const updatedTicket = {
+        ...ticketToToggle,
+        completed: !ticketToToggle.completed,
+      };
+      await ticketService.updateTicket(id, updatedTicket);
+      setTickets((prevTickets) =>
+        Array.isArray(prevTickets)
+          ? prevTickets.map((ticket) =>
+              ticket.id === id ? updatedTicket : ticket
+            )
+          : []
+      );
+    } catch (error) {
+      console.error("Failed to toggle ticket completion", error);
+    }
   };
 
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route
-            path="/"
-            element={currentUser ? <Navigate to="/tickets" /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/login"
-            element={<Login onLogin={setCurrentUser} />}
-          />
-          <Route
-            path="/register"
-            element={<Register />}
-          />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login onLogin={setCurrentUser} />} />
+          <Route path="/register" element={<Register />} />
           <Route
             path="/tickets"
             element={
@@ -102,7 +103,10 @@ const App = () => {
                   />
                   <TicketModal
                     isOpen={isModalOpen}
-                    onRequestClose={() => { setIsModalOpen(false); setEditingTicket(null); }}
+                    onRequestClose={() => {
+                      setIsModalOpen(false);
+                      setEditingTicket(null);
+                    }}
                     onAddTicket={handleAddTicket}
                     editingTicket={editingTicket}
                   />
