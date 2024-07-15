@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import authService from '../services/authServer';
-import './Register.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../services/authServer";
+import "./Register.css";
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -13,17 +13,17 @@ const Register = () => {
     e.preventDefault();
     try {
       await authService.register({ username, password });
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Failed to register', error);
-      setError(error.response?.data?.message || 'Failed to register');
+      console.error("Failed to register", error);
+      setError(error.response?.data?.message || "Failed to register");
     }
   };
 
   return (
     <div className="register-container">
       <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username</label>
@@ -45,7 +45,9 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit" className="register-button">Register</button>
+        <button type="submit" className="register-button">
+          Register
+        </button>
       </form>
       <p>
         Already have an account? <Link to="/login">Login</Link>

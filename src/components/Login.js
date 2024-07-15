@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import authService from '../services/authServer';
-import './Login.css';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import authService from "../services/authServer";
+import "./Login.css";
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,17 +14,17 @@ const Login = ({ onLogin }) => {
     try {
       const user = await authService.login({ username, password });
       onLogin(user);
-      navigate('/tickets');
+      navigate("/tickets");
     } catch (error) {
-      console.error('Failed to login', error);
-      setError(error.response?.data?.message || 'Failed to login');
+      console.error("Failed to login", error);
+      setError(error.response?.data?.message || "Failed to login");
     }
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username</label>
@@ -46,7 +46,9 @@ const Login = ({ onLogin }) => {
             required
           />
         </div>
-        <button type="submit" className="login-button">Login</button>
+        <button type="submit" className="login-button">
+          Login
+        </button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Sign Up</Link>

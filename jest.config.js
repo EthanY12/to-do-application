@@ -8,5 +8,5 @@ module.exports = {
     "\\.(css|less)$": "identity-obj-proxy",
   },
   testPathIgnorePatterns: ["/node_modules/", "/cypress/"],
-  testMatch: ["<rootDir>/src/tests/unit/**/*.test.[jt]s?(x)"], 
+  testMatch: ["<rootDir>/src/tests/unit/**/*.test.[jt]s?(x)"],
 };
