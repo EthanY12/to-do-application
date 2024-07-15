@@ -301,7 +301,6 @@ The board can be viewed: https://todoapp.atlassian.net/jira/software/projects/KA
 
 ![Credit: https://khorikov.org/posts/2021-01-04-unit-testing-vs-bdd/]https://khorikov.org/images/2020/2020-03-04-test-pyramid.png
 
-
 In general unit tests should be the most frequent type of test, this is closer to code testing than user experience as only one function is tested.s
 
 Integration test should be infrequent but should test multiple functions to understand their outcomes. Integration tests provides a way of simulating end user experience, ex example would be testing a registration system to understand outcomes that may occur.
@@ -315,8 +314,6 @@ Integration - Integration tests provides the ability to test multiple functions 
 Manuel testing - When a feature was added to the application, during the review process it would be teste by the reviewer to ensure the application was within a working order. A few examples are printing text to a command line was also conducted to test if buttons being clicked were being registered, or the login in system was logging in a user.
 
 End to end testing - End to end provides the ability to test user registration, user login, creating a to-do task, editing a to-do task and deleting a to-do task, simulating the processes most commonly to occur within the application.
-
-
 
 ### CI/CD Pipeline
 
