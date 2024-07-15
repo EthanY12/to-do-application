@@ -1,32 +1,34 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import authService from "../services/authServer";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import authService from '../services/authServer';
+import './Register.css';
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await authService.register(username, password);
-      navigate("/login");
-    } catch (err) {
-      setError("Registration failed. Please try again.");
+      await authService.register({ username, password });
+      navigate('/login');
+    } catch (error) {
+      console.error('Failed to register', error);
+      setError(error.response?.data?.message || 'Failed to register');
     }
   };
 
   return (
-    <div className="auth-container">
+    <div className="register-container">
       <h2>Register</h2>
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleRegister}>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="register-username">Username</label>
+          <label htmlFor="username">Username</label>
           <input
-            id="register-username"
+            id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -34,17 +36,20 @@ const Register = () => {
           />
         </div>
         <div>
-          <label htmlFor="register-password">Password</label>
+          <label htmlFor="password">Password</label>
           <input
-            id="register-password"
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" className="register-button">Register</button>
       </form>
+      <p>
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
   );
 };

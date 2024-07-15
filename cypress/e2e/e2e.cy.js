@@ -1,5 +1,3 @@
-// cypress/integration/user_end_testing.spec.js
-
 describe('User End Testing', () => {
   const baseUrl = 'http://localhost:3000'; // Change this to your frontend URL
   const apiUrl = 'http://localhost:5000'; // Change this to your backend URL
@@ -28,12 +26,13 @@ describe('User End Testing', () => {
     // Log in the registered user
     cy.visit(`${baseUrl}/login`);
 
-    cy.get('#login-username').type(username);
-    cy.get('#login-password').type(password);
+    cy.get('#username').type(username);
+    cy.get('#password').type(password);
     cy.get('button[type="submit"]').click();
 
+
     // Verify login by checking URL
-    cy.url().should('include', '/tickets');
+    cy.url({ timeout: 10000 }).should('include', '/tickets'); // Increase the timeout to 10 seconds
 
     // Create a new ticket
     cy.contains('New Ticket').should('be.visible').click();

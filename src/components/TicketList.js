@@ -1,8 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const TicketList = ({ tickets = [], onEdit, onDelete, onToggleComplete }) => {
+  // Filter out any undefined or malformed tickets
+  const validTickets = tickets.filter(ticket => ticket && ticket.date && ticket.time && ticket.title && ticket.description);
+
   // Sort tickets by date and then by time
-  const sortedTickets = tickets.sort((a, b) => {
+  const sortedTickets = validTickets.sort((a, b) => {
     const dateComparison = new Date(a.date) - new Date(b.date);
     if (dateComparison !== 0) {
       return dateComparison;
@@ -22,12 +25,17 @@ const TicketList = ({ tickets = [], onEdit, onDelete, onToggleComplete }) => {
   return (
     <div className="ticket-list">
       <h2>Tickets</h2>
-      {Object.keys(groupedTickets).map(date => (
+      {Object.keys(groupedTickets).map((date) => (
         <div key={date} className="ticket-date-group">
           <h3>{date}</h3>
           <ul>
-            {groupedTickets[date].map(ticket => (
-              <li key={ticket.id} style={{ textDecoration: ticket.completed ? 'line-through' : 'none' }}>
+            {groupedTickets[date].map((ticket) => (
+              <li
+                key={ticket.id}
+                style={{
+                  textDecoration: ticket.completed ? "line-through" : "none",
+                }}
+              >
                 <div>
                   <strong>{ticket.title}</strong> - {ticket.time}
                 </div>
@@ -36,7 +44,7 @@ const TicketList = ({ tickets = [], onEdit, onDelete, onToggleComplete }) => {
                   <button onClick={() => onEdit(ticket)}>Edit</button>
                   <button onClick={() => onDelete(ticket.id)}>Delete</button>
                   <button onClick={() => onToggleComplete(ticket.id)}>
-                    {ticket.completed ? 'Undo' : 'Done'}
+                    {ticket.completed ? "Undo" : "Done"}
                   </button>
                 </div>
               </li>
