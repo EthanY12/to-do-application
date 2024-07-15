@@ -300,7 +300,7 @@ The board can be viewed: https://todoapp.atlassian.net/jira/software/projects/KA
 ## Testing Metholodly
 
 ![Credit: https://khorikov.org/posts/2021-01-04-unit-testing-vs-bdd/]https://khorikov.org/images/2020/2020-03-04-test-pyramid.png
- 
+
 
 In general unit tests should be the most frequent type of test, this is closer to code testing than user experience as only one function is tested.s
 
